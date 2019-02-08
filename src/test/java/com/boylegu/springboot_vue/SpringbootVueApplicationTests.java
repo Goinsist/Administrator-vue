@@ -5,6 +5,7 @@ import org.junit.runner.RunWith;
 import org.junit.Before;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.mock.web.MockServletContext;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -31,6 +32,7 @@ import com.boylegu.springboot_vue.dao.PersonsRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 //@ContextConfiguration(classes = MockServletContext.class)
+
 @SpringBootTest(classes = { App.class })
 @WebAppConfiguration
 public class SpringbootVueApplicationTests {

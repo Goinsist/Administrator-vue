@@ -1,7 +1,7 @@
 <template>
     <header style="background-color: rgb(10, 47, 88);">
         <div class="text-logo">{{msg}}</div>
-        <p class="meta">This demo project for express new develop practice demo.</p>
+        <p class="meta">用于管理校园商铺头条图片，商店权限等</p>
         <ul class="header-operations">
         </ul>
     </header>
@@ -12,7 +12,7 @@
         name: 'db-header',
         data () {
             return {
-                msg: 'SpringBoot-vue'
+                msg: '校园商铺超级管理员'
             }
         }
     }
@@ -46,7 +46,7 @@
         color: #7e95c5;
         width: 200px;
         display: block;
-        margin: -5px 0 0 225px;
+        margin: -5px 0 0 355px;
         font-weight: 700;
         font-size: 0.3rem;
     }

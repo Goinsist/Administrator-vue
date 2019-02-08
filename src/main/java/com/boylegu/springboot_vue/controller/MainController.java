@@ -2,12 +2,7 @@ package com.boylegu.springboot_vue.controller;
 
 import com.boylegu.springboot_vue.entities.Persons;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -70,7 +65,8 @@ public class MainController {
         return responseEntity;
     }
 
-    @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(method = RequestMethod.GET)
+    @ResponseBody
     public Map<String, PaginationMultiTypeValuesHelper> getPersonsAll(
             @RequestParam(value = "page", required = false) Integer pages,
             @RequestParam("sex") String sex,

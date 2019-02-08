@@ -4,50 +4,70 @@
                 :data="tableData"
                 border
                 style="width: 100%"
+                header-row-class-name="center"
                 class="table">
+
             <el-table-column
                     fixed
-                    prop="id"
-                    label="item_id"
+                    prop="lineId"
+
+                    label="ID"
+                    width="70">
+
+            </el-table-column>
+            <el-table-column
+                    prop="lineName"
+                    label="轮播图名字"
                     width="100">
             </el-table-column>
             <el-table-column
-                    prop="username"
-                    label="username"
-                    width="120">
+                    prop="lineLink"
+                    label="跳转链接"
+                    width="220">
             </el-table-column>
             <el-table-column
-                    prop="email"
-                    label="email"
-                    width="120">
+                    prop="lineImg"
+                    label="轮播图地址"
+                    width="290">
             </el-table-column>
             <el-table-column
-                    prop="phone"
-                    label="phone"
-                    width="130">
+                    prop="priority"
+                    label="优先级"
+                    width="80">
             </el-table-column>
             <el-table-column
-                    prop="sex"
-                    label="sex"
-                    width="100">
+                    prop="enableStatus"
+                    label="可用状态"
+                    width="80"
+                     >
+              <template slot-scope="scope" >
+                <el-tag v-if="scope.row!=null" :type="scope.row.enableStatus===1?'success':'warning'" >{{scope.row.enableStatus===1?'可用':'不可用'}}</el-tag>
+              </template>
+
+
+
             </el-table-column>
+
+          <el-table-column
+            prop="lastEditTime"
+            label="更新时间"
+            width="180"
+           :formatter="formatterL">
+          </el-table-column>
             <el-table-column
-                    prop="zone"
-                    label="zone"
-                    width="100">
-            </el-table-column>
-            <el-table-column
-                    prop="create_datetime"
-                    label="create_datetime"
-                    width="300"
-                    :formatter="formatter">
-            </el-table-column>
-            <el-table-column
-                    fixed="right"
-                    label="Operation"
-                    width="100">
-                <template scope="scope">
-                    <el-button @click="editItem(scope.$index, tableData)" type="text" size="large">Edit</el-button>
+                  fixed="right"
+                    prop="operation"
+                    label="操作"
+                    width="200">
+                <template slot-scope="scope" >
+                    <el-button
+                      type="primary" icon="el-icon-edit" size="small"
+                      @click="editItem(scope.$index,tableData)">编辑</el-button>
+                    <el-button
+                      type="primary" icon="el-icon-delete" size="small"
+                      @click="handleDelete(scope.$index, scope.tableData)">删除</el-button>
+
+
                 </template>
             </el-table-column>
         </el-table>
@@ -67,21 +87,28 @@
         data(){
             return {
                 tableData: [],
-                apiUrl: 'http://127.0.0.1:8000/api/persons',
+                apiUrl: 'http://47.99.54.87/o2o/headline',
                 total: 0,
                 pageSize: 10,
                 currentPage: 1,
                 sex: '',
                 email: '',
-                dialogFormVisible: false,
-                form: '',
+              dialogFormVisible: false,
+                form:{
+
+                },
+
+
+
             }
         },
+
         components: {
-            DbModal
+           'db-modal': DbModal
         },
-        mounted () {
+          mounted () {
             this.getCustomers();
+
             Bus.$on('filterResultData', (data) => {
                 this.tableData = data.results;
                 this.total = data.total_pages;
@@ -99,17 +126,13 @@
             },
 
             getCustomers: function () {
-                this.$axios.get(this.apiUrl, {
-                    params: {
-                        page: this.currentPage,
-                        sex: this.sex,
-                        email: this.email
-                    }
-                }).then((response) => {
-                    this.tableData = response.data.data.results;
-                    this.total = response.data.data.total;
-                    this.pageSize = response.data.data.count;
-                    console.log(response.data.data);
+
+                this.$axios.get(this.apiUrl).then((response) => {
+
+                    this.tableData = response.data.lineList;
+
+
+                    console.log(response.data.lineList);
                 }).catch(function (response) {
                     console.log(response)
                 });
@@ -120,20 +143,28 @@
             },
             editItem: function (index, rows) {
                 this.dialogFormVisible = true;
-                const itemId = rows[index].id;
-                const idurl = 'http://127.0.0.1:8000/api/persons/detail/' + itemId;
+                const lineId = rows[index].lineId;
+
+                const idurl = 'http://47.99.54.87/o2o/headline/getheadlinebyid?lineId=' + lineId;
                 this.$axios.get(idurl).then((response) => {
-                    this.form = response.data;
-                }).catch(function (response) {
-                    console.log(response)
-                });
-            },
+                    this.form = response.data.headLine;
+
+    console.log(response.data.headLine);
+    }).catch(function (response) {
+      console.log(response)
+    });
+    },
 
             formatter(row, column) {
-                let data = this.$moment(row.create_datetime, this.$moment.ISO_8601);
-                return data.format('YYYY-MM-DD')
+                let data = this.$moment(row.createTime, this.$moment.utf-8);
+                return data.format('YYYY-MM-DD HH:mm:ss')
             },
-        }
+          formatterL(row, column) {
+            let data = this.$moment(row.lastEditTime, this.$moment.utf-8);
+            return data.format('YYYY-MM-DD HH:mm:ss')
+          },
+
+          }
     }
 </script>
 
@@ -145,6 +176,9 @@
     .pagination {
         margin-top: 10px;
         float: right;
+    }
+    .center th {
+      text-align: center;
     }
 
 </style>
