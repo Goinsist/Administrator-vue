@@ -59,21 +59,23 @@
                     prop="operation"
                     label="操作"
                     width="200">
+              <template slot="header" >
+                <el-button type="success" icon="el-icon-circle-plus-outline" size="medium" @click="editItem(null,null)">添加</el-button>
+              </template>
                 <template slot-scope="scope" >
                     <el-button
                       type="primary" icon="el-icon-edit" size="small"
                       @click="editItem(scope.$index,tableData)">编辑</el-button>
                     <el-button
                       type="primary" icon="el-icon-delete" size="small"
-                      @click="handleDelete(scope.$index, scope.tableData)">删除</el-button>
+                      @click="handleDelete(scope.$index, tableData)">删除</el-button>
 
 
                 </template>
             </el-table-column>
         </el-table>
-        <el-pagination class="pagination" layout="prev, pager, next" :total="total" :page-size="pageSize"
-                       v-on:current-change="changePage">
-        </el-pagination>
+      <el-pagination  @current-change="changePage" background :current-page.sync="currentPage" :page-size="pageSize" layout="total, prev, pager, next" :total="total">
+      </el-pagination>
         <db-modal :dialogFormVisible="dialogFormVisible" :form="form" v-on:canclemodal="dialogVisible"></db-modal>
     </div>
 
@@ -88,11 +90,11 @@
             return {
                 tableData: [],
                 apiUrl: 'http://47.99.54.87/o2o/headline',
+
                 total: 0,
-                pageSize: 10,
+                pageSize: 5,
                 currentPage: 1,
-                sex: '',
-                email: '',
+
               dialogFormVisible: false,
                 form:{
 
@@ -120,14 +122,54 @@
         },
 
         methods: {
+             handleDelete:function(index,rows) {
+               const lineId = rows[index].lineId;
+               this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+                 confirmButtonText: '确定',
+                 cancelButtonText: '取消',
+                 type: 'warning'
+               }).then(() => {
+                 this.$axios.post('http://47.99.54.87/o2o/headline/deletebyid?lineId='+lineId).then((response) => {
+                   if (response.data.success) {
+                     this.$message({
+                       type: 'success',
+                       message: '删除成功!'
+                     });
+                   }else {
+                     this.$message({
+                       type: 'error',
+                       message: '删除失败!'
+                     });
+                   }
+                 })
 
+               }).catch(() => {
+                 this.$message({
+                   type: 'info',
+                   message: '已取消删除'
+                 });
+               });
+
+
+             },
             dialogVisible: function () {
                 this.dialogFormVisible = false;
+                this.form={}
             },
 
             getCustomers: function () {
 
-                this.$axios.get(this.apiUrl).then((response) => {
+                this.$axios.get(this.apiUrl,{
+
+                  params:{
+                    pageIndex:this.currentPage,
+                    pageSize:this.pageSize,
+
+                  }
+                  }
+                ).then((response) => {
+
+                this.total=response.data.total;
 
                     this.tableData = response.data.lineList;
 
@@ -143,16 +185,22 @@
             },
             editItem: function (index, rows) {
                 this.dialogFormVisible = true;
-                const lineId = rows[index].lineId;
 
-                const idurl = 'http://47.99.54.87/o2o/headline/getheadlinebyid?lineId=' + lineId;
-                this.$axios.get(idurl).then((response) => {
-                    this.form = response.data.headLine;
 
-    console.log(response.data.headLine);
-    }).catch(function (response) {
-      console.log(response)
-    });
+               if(index==null&&rows==null){
+                 this.form={};
+
+               }else {
+                 const lineId = rows[index].lineId;
+                 const idurl = 'http://47.99.54.87/o2o/headline/getheadlinebyid?lineId=' + lineId;
+                 this.$axios.get(idurl).then((response) => {
+                   this.form = response.data.headLine;
+
+                   console.log(response.data.headLine);
+                 }).catch(function (response) {
+                   console.log(response)
+                 });
+               }
     },
 
             formatter(row, column) {

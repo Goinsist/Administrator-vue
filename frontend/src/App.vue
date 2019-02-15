@@ -82,7 +82,7 @@
     padding-left: 25px;
   }
   .footer {
-    height: 120px;
+    height: 110px;
     background-color: #324057;
     color: #a4aebd;
     width: 100%;
@@ -90,5 +90,6 @@
     margin-top: -120px;
     line-height: 1;
     font-size: 22px;
+
   }
 </style>

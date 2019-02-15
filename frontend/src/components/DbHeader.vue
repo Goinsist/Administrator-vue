@@ -1,10 +1,11 @@
 <template>
-    <header style="background-color: rgb(10, 47, 88);">
-        <div class="text-logo">{{msg}}</div>
-        <p class="meta">用于管理校园商铺头条图片，商店权限等</p>
-        <ul class="header-operations">
-        </ul>
+    <header style="background-color: #545c64;">
+
+           <div class="text-logo" style="float: left">{{msg}}<p class="meta">用于管理校园商铺头条图片，商店权限等</p></div>
+
+
     </header>
+
 </template>
 
 <script>
@@ -35,7 +36,7 @@
         vertical-align: middle;
         border-style: none;
         position: relative;
-        top: 26px;
+        top: 16px;
         right: -20px;
         font-size: 25px;
         color: white;
@@ -44,10 +45,11 @@
 
     .meta {
         color: #7e95c5;
-        width: 200px;
+        width: 300px;
         display: block;
-        margin: -5px 0 0 355px;
+        margin: -20px 0 0 255px;
         font-weight: 700;
         font-size: 0.3rem;
     }
+
 </style>
