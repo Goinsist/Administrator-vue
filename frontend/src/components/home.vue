@@ -14,7 +14,7 @@
 
     </el-row>
 
-    <el-row>
+    <el-row  >
       <el-col :span="24">
         <footer class="footer">
           <db-footer></db-footer>
@@ -24,3 +24,77 @@
     </el-row>
   </div>
 </template>
+<script>
+  import DbHeader  from './DbHeader.vue'
+  import DbSidebar from './DbSidebar.vue'
+  import DbFilterinput from './DbFilterinput.vue'
+  import DbTable from './DbTable.vue'
+  import DbFooter from './DbFooter.vue'
+  import ElRow from "element-ui/packages/row/src/row";
+  export default {
+    name: 'home',
+    components: {
+      ElRow, DbHeader,
+      DbSidebar,
+      DbFilterinput,
+      DbTable,
+      DbFooter
+    },
+  }
+</script>
+
+
+<style scoped>
+  element.style {
+    background-color: rgb(10, 47, 88);
+  }
+  body {
+     font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+     margin: 0;
+     display: flex;
+     min-height: 100vh;
+     flex-direction: column;
+   }
+  .el-menu, body, html {
+    height: 100%;
+  }
+  .wrapper {
+    position: relative;
+  }
+  div, footer {
+    display: block;
+  }
+  .container {
+    padding-top: 70px;
+    flex:1;
+  }
+  .container,.wrapper {
+    height: 100%;
+  }
+  .menu {
+    height: 100%;
+    background-color: #eef1f6;
+
+  }
+  .content {
+    padding-top: 25px;
+    padding-right: 25px;
+    padding-bottom: 125px;
+    padding-left: 25px;
+
+  }
+
+  .footer {
+
+    height: 110px;
+    background-color: #324057;
+    color: #a4aebd;
+    width: 100%;
+    z-index: 1000;
+    margin-top: -120px;
+    line-height: 1;
+    font-size: 22px;
+
+  }
+
+</style>

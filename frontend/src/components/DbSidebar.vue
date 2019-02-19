@@ -1,8 +1,8 @@
 <template>
-<div>
-    <li class="el-menu-item is-active" style="">{{rotationChart}}</li>
-  <li class="el-menu-item is-active" style="">{{shopAuthority}}</li>
-</div>
+
+  <li  class="el-menu-item is-active el-icon-picture" style="">{{rotationChart}}</li>
+
+
 </template>
 
 <script>
@@ -11,15 +11,15 @@
         name: 'db-sidebar',
         data() {
             return {
-              rotationChart:'首页图片管理',
-                shopAuthority:'商铺审核'
+              rotationChart:'   首页轮播图管理',
+
             }
         }
     }
 
 </script>
 
-<style>
+<style scoped>
     li {
         padding-left: 10px;
     }

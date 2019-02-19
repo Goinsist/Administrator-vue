@@ -7,8 +7,8 @@ import App from './App.vue'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css';
 import router from './router';
-import lang from 'element-ui/lib/locale/lang/en'
-import locale from 'element-ui/lib/locale'
+import lang from 'element-ui/lib/locale/lang/en';
+import locale from 'element-ui/lib/locale';
 
 // more grace import third package !
 import moment from 'moment'

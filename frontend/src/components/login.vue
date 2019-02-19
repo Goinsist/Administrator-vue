@@ -1,77 +1,101 @@
 <template>
+
 	<div class="login">
+    <div id="web_bg" ></div>
 		<div class="login-container">
-			<el-form :model="loginForm" :rules="loginRules" ref="loginForm" class="card-box login-form">
-			    <h1 class="title">百慧云诊所</h1>
-			    <el-form-item prop="userName" class="item userItem">
-			        <span class="svg-container">
-			        	<i class="fa fa-user-o" aria-hidden="true"></i>
-			        </span>
-			        <el-input name="userName" type="text" v-model="loginForm.userName"  placeholder="用户名" class="input-content"></el-input>
+
+			<el-form :model="loginForm" :style="loginVisible"  status-icon :rules="loginRules" ref="loginForm" class="card-box login-form">
+			    <h1 class="title">登 录</h1>
+			    <el-form-item prop="email" class="item userItem" :label-width="formLabelWidth">
+
+			    <el-input suffix-icon="el-icon-edit" auto-complete="off" name="userName" type="text" v-model="loginForm.email"  placeholder="邮箱" class="input-content"></el-input>
 			    </el-form-item>
-			    <el-form-item prop="password" class="item">
-			        <span class="svg-container">
-			        	<i class="fa fa-lock" aria-hidden="true"></i>
-			        </span>
-			        <el-input name="password" type="password" @keyup.enter.native="handleLogin" v-model="loginForm.password" placeholder="密码" class="input-content"></el-input>
+			    <el-form-item prop="password" class="item" :label-width="formLabelWidth">
+
+
+             <el-input suffix-icon="el-icon-edit" name="password" type="password" @keyup.enter.native="handleLogin" v-model="loginForm.password" placeholder="密码" class="input-content"></el-input>
 			    </el-form-item>
+<el-form-item :label-width="formLabel">
+  <el-input suffix-icon="el-icon-edit" name="verify" type="text"  v-model="loginForm.verifyCode" placeholder="验证码" class="input-content"></el-input><img class="image" src="http://gongyu91.cn/o2o/images/captcha" />
+</el-form-item>
 			    <el-form-item>
-			    	测试账号：1111/vuex  密码：123456
-			    </el-form-item>
-			    <el-form-item>
-			        <el-button type="primary" @click="handleLogin">
-			            登录
+			        <el-button type="primary" class="submit" @click="handleLogin">
+			            确定
 			        </el-button>
-			        <el-button type="primary">
-			            <router-link to="/register">注册</router-link>
-			        </el-button>
+            <el-button type="primary" @click="handleRegist">
+              注册
+            </el-button>
+
 			    </el-form-item>
 			</el-form>
+            <regist :formVisible="formVisible"></regist>
 		</div>
 		<router-view></router-view>
 	</div>
 </template>
 <style scoped>
-	.login .login-container{
-		position: relative;
-		width: 500px;
-		height: 350px;
-		margin: 15% auto;
-		background: #fff;
-		text-align: center;
-		border-radius: 5px;
-	}
-	.login .login-container .title{
-		position: relative;
-		top: 30px;
-		font-family: "华文行楷"
-	}
-	.login .login-container .userItem{
-		margin-top: 50px;
+.input-content{
+  margin-left: -180px;
+  margin-top: 10px;
+}
+.login:hover{
+  border-radius: 8px;
+  -webkit-box-shadow: #ccc 0px 10px 10px;
 
-	}
-	.login .login-container .item .svg-container{
-		display: inline-block;
-		width: 40px;
+  -moz-box-shadow: #ccc 0px 10px 10px;
+
+  box-shadow: #ccc 0px 10px 10px;  }
+  .title{
+    font-size: 22px;
+   font-family: 新宋体;
+    margin-top: 90px;
+  }
+.image{
+  margin-bottom: -15px;
+}
+.submit{
+  margin-right: 50px;
+}
+
+  #web_bg{
+
+    background-image: url("../assets/1550214272903.jpg");
+    position:fixed;
+    top: 0;
+    left: 0;
+    width:100%;
+    height:100%;
+    min-width: 1000px;
+    z-index:-10;
+    zoom: 1;
+    background-color: #fff;
+    background-repeat: no-repeat;
+    background-size: cover;
+    -webkit-background-size: cover;
+    -o-background-size: cover;
+    background-position: center 0;
+  }
+	.login {
+		position: relative;
+		width: 600px;
+		height: 550px;
+		margin: 15% auto;
+		background:#FCFCFC;
+
 		text-align: center;
-		color: #889aa4;
-		font-size: 20px;
+		border-radius: 1px;
 	}
-	.login .login-container .item .input-content{
-		display: inline-block;
-		height: 47px;
-    	width: 55%;
-	}
-	.login .login-container a{
-		color: #fff;
-		text-decoration: none;
-	}
+  .login-form{
+
+ }
+
 </style>
 <script>
-	import Home from '@/view/home'
-	import Hello from '@/view/home_content/hello'
-	import store from './../store';
-	export default{
+	import Home from '@/components/home.vue';
+import Regist from './regist.vue';
+
+export default{
+  components:{Regist},
 		// mounted:function(){
 		// 	this.$http.get('../../static/login.json').then(function(response){
 		// 		this.username=response.data;
@@ -79,16 +103,18 @@
 		// 	});
 		// },
 		data(){
-			var validateUserName=(rule, value, callback) =>{
-				console.log("aaaa");
+			var validateEmail=(rule, value, callback) =>{
+
 				if(!value){
-					callback(new Error("请输入用户名"));
+				return	callback(new Error("请输入邮箱!"));
 				}
 				else{
-					if(value != "1111" && value != "vuex"){
-						callback(new Error("用户名不存在"));
-					}		
-					else{
+          if (value !== '') {
+            var reg=/^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+            if(!reg.test(value)) {
+              callback(new Error('请输入有效的邮箱!'));
+            }
+            }else{
 						callback();
 					}
 					// this.$http.get('../../static/login.json').then(function(response){
@@ -105,13 +131,13 @@
 						// }
 					// });
 				}
-				
+
 
 			};
 			var validatePass = (rule, value, callback) => {
 	    	    if (value === '') {
 	    	        callback(new Error('请输入密码'));
-	    	    } 
+	    	    }
 	    	    else if(value.length<6){
 	    	        callback(new Error('密码不能少于6位'));
 	    	    }
@@ -124,38 +150,45 @@
 	    	    }
     		};
 			return{
-				loginForm:store.state.userInfo,
-				// loginForm:{
-				// 	userName:'',
-				// 	password:'',
-					// psw:''
-				// },
-				// username:[],
-				loginRules:{
-					userName:[
-						{validator: validateUserName, trigger: 'blur' }
-					],
-					password:[
-						{validator: validatePass, trigger: 'blur' }
-					]
-				}
+			  loginVisible:'display:inline',
+   formVisible:'display:none',
+        formLabel:'246px',
+        formLabelWidth:'180px',
+				loginForm:{
+          email:'',
+          password:'',
+
+        },
+        username:[],
+        loginRules:{
+          email:[
+            {validator: validateEmail, trigger: 'blur' }
+          ],
+          password:[
+            {validator: validatePass, trigger: 'blur' }
+          ]
+        }
 			};
-			
+
 		},
 		methods:{
+      handleRegist:function(){
+        this.loginVisible='display:none';
+        this.formVisible='display:inline';
+      },
 			handleLogin:function(){
 				 this.$refs.loginForm.validate((valid) => {
 		          	if (valid) {
-		           		this.$router.push({ path: 'home/hello',component:Hello});
+		           		this.$router.push({ path: '/home',component:Home});
 		       		} else {
 		            	console.log('error submit!!');
 		            	return false;
 		        	}
 		      	});
-			}	
+			}
 		},
 		mounted:function(){
-	  	console.log("stor内容" ,store.state.userInfo);
+	  	console.log("stor内容" );
 	  }
 	}
 </script>

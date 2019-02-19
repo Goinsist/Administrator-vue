@@ -1,7 +1,7 @@
 <template>
     <header style="background-color: #545c64;">
 
-           <div class="text-logo" style="float: left">{{msg}}<p class="meta">用于管理校园商铺头条图片，商店权限等</p></div>
+           <div class="text-logo" >{{msg}}<p class="meta">用于管理校园商铺头条图片，商店权限等</p></div>
 
 
     </header>
@@ -19,7 +19,7 @@
     }
 </script>
 
-<style>
+<style scoped>
     header {
         height: 70px;
         position: absolute;
@@ -29,6 +29,7 @@
         padding: 0 20px;
         z-index: 1;
         box-sizing: border-box;
+
     }
 
     .text-logo {
